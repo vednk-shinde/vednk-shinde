@@ -12,6 +12,11 @@ on:
 permissions:
   contents: write
 
+# Never let two runs race to force-push the output branch.
+concurrency:
+  group: snake
+  cancel-in-progress: false
+
 jobs:
   snake:
     runs-on: ubuntu-latest
