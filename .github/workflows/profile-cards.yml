@@ -26,6 +26,7 @@ jobs:
       - name: Render SVG cards
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TICKER: VEDANK
         run: python scripts/generate_cards.py "${{ github.repository_owner }}" assets
 
       - name: Commit if changed

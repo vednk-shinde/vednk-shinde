@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="16" viewBox="0 0 1000 16" role="img" aria-label="divider">
+<defs>
+  <linearGradient id="base" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#F7931A" stop-opacity="0"/><stop offset="50%" stop-color="#F7931A" stop-opacity="0.35"/><stop offset="100%" stop-color="#F7931A" stop-opacity="0"/>
+  </linearGradient>
+  <radialGradient id="spark"><stop offset="0%" stop-color="#fff"/><stop offset="35%" stop-color="#FFD166"/><stop offset="100%" stop-color="#F7931A" stop-opacity="0"/></radialGradient>
+</defs>
+<style>
+  .p { animation: run 3.2s cubic-bezier(.45,.05,.55,.95) infinite; }
+  .p2 { animation: run 3.2s cubic-bezier(.45,.05,.55,.95) 1.6s infinite; opacity: .6; }
+  @keyframes run { from { transform: translateX(-80px); } to { transform: translateX(1080px); } }
+  @media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+<rect x="0" y="7.5" width="1000" height="1" fill="url(#base)"/>
+<ellipse class="p" cx="0" cy="8" rx="60" ry="6" fill="url(#spark)"/>
+<ellipse class="p2" cx="0" cy="8" rx="40" ry="4" fill="url(#spark)"/>
+</svg>
