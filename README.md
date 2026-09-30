@@ -10,7 +10,7 @@
 <p align="center">
   <a href="mailto:YOUR_EMAIL_HERE"><img src="https://img.shields.io/badge/Email-0d1117?style=for-the-badge&logo=gmail&logoColor=F7931A" alt="Email"/></a>
   <a href="https://www.linkedin.com/in/YOUR_LINKEDIN_HERE"><img src="https://img.shields.io/badge/LinkedIn-0d1117?style=for-the-badge&logo=linkedin&logoColor=0A66C2" alt="LinkedIn"/></a>
-  <a href="https://twitter.com/YOUR_TWITTER_HERE"><img src="https://img.shields.io/badge/Twitter-0d1117?style=for-the-badge&logo=x&logoColor=white" alt="Twitter / X"/></a>
+  <a href="https://medium.com/@vedank.shinde24"><img src="https://img.shields.io/badge/Medium-0d1117?style=for-the-badge&logo=medium&logoColor=white" alt="Medium"/></a>
   <a href="https://github.com/vednk-shinde"><img src="https://img.shields.io/badge/GitHub-0d1117?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/></a>
   <img src="https://komarev.com/ghpvc/?username=vednk-shinde&style=for-the-badge&color=F7931A&label=VIEWS" alt="Profile views"/>
 </p>
@@ -96,10 +96,6 @@ Hey there! I'm **Vedank**, a developer who loves building systems that stay **fa
 - 📝 [Event Sourcing and CQRS from First Principles](https://YOUR_BLOG_LINK_2) · *Dev.to*
 - 📝 [Idempotency Keys: Making Payment APIs Safe to Retry](https://YOUR_BLOG_LINK_3) · *Hashnode*
 - 📝 [What I Learned Writing an LRU/LFU Cache from Scratch](https://YOUR_BLOG_LINK_4) · *Medium*
-
-<a href="https://www.buymeacoffee.com/YOUR_BMC_USERNAME" target="_blank">
-  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="45"/>
-</a>
 
 <img src="./assets/divider.svg" width="100%" alt=""/>
 

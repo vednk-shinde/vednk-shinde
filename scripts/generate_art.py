@@ -9,6 +9,7 @@ Usage: python scripts/generate_art.py assets
 import os
 import random
 import sys
+from html import escape
 
 BG = "#0d1117"
 BG_DEEP = "#010409"
@@ -69,13 +70,21 @@ def pixel_v(x0, y0, cell):
     cells = set()
     for r in range(rows):
         for c in (r, r + 1, 22 - r, 23 - r):
-            cells.add((r, c))
+            cells.add((r, c, 0.0))
+    # S: 8 columns wide, same 12-row height and 2-block stroke as the V, starting 2 columns after it.
+    s_rows = ["_#######", "########", "##______", "##______", "##______", "_#######",
+              "#######_", "______##", "______##", "______##", "########", "#######_"]
+    s_col0 = 26
+    for r, row in enumerate(s_rows):
+        for c, ch in enumerate(row):
+            if ch == "#":
+                cells.add((r, s_col0 + c, 1.1))  # S lights up after the V
     shadow, blocks = [], []
-    for r, c in sorted(cells):
+    s = cell - 2
+    for r, c, offset in sorted(cells):
         x, y = x0 + c * cell, y0 + r * cell
-        s = cell - 2
-        shadow.append(f'<rect x="{x + 4}" y="{y + 4}" width="{s}" height="{s}" rx="2" fill="{ACCENT}" opacity="0.18"/>')
-        delay = 0.25 + r * 0.09 + (c % 3) * 0.02
+        shadow.append(f'<rect x="{x + 3}" y="{y + 3}" width="{s}" height="{s}" rx="2" fill="{ACCENT}" opacity="0.18"/>')
+        delay = 0.25 + offset + r * 0.08 + (c % 3) * 0.02
         blocks.append(
             f'<rect class="blk" x="{x}" y="{y}" width="{s}" height="{s}" rx="2" fill="url(#vGrad)" '
             f'style="animation-delay:{delay:.2f}s"/>'
@@ -83,11 +92,52 @@ def pixel_v(x0, y0, cell):
     return "\n".join(shadow), "\n".join(blocks)
 
 
+def typing_cycle(phrases, x, cycle, char_w=11.6, size=19):
+    """Type, hold and erase each phrase in turn, looping forever.
+
+    Each phrase gets its own clip rect whose width grows and shrinks inside
+    that phrase's time slot; a single cursor follows whichever is active.
+    """
+    text_x = x + 26  # after the "> " prompt
+    n = len(phrases)
+    clips, texts = [], []
+    cursor = [(0.0, text_x)]
+
+    def dedupe(points):
+        out = []
+        for t, v in points:
+            if out and abs(out[-1][0] - t) < 1e-9:
+                out[-1] = (t, v)
+            else:
+                out.append((t, v))
+        return out
+
+    for i, phrase in enumerate(phrases):
+        a, span = i / n, 1 / n
+        width = len(phrase) * char_w + 4
+        t_typed, t_hold, t_erased = a + 0.40 * span, a + 0.85 * span, a + 0.97 * span
+        pts = dedupe([(0.0, 0), (a, 0), (t_typed, width), (t_hold, width), (t_erased, 0), (1.0, 0)])
+        clips.append(
+            f'<clipPath id="type{i}"><rect x="{text_x - 2}" y="150" height="40" width="0">'
+            f'<animate attributeName="width" values="{";".join(f"{v:.0f}" for _, v in pts)}" '
+            f'keyTimes="{";".join(f"{t:.4f}" for t, _ in pts)}" dur="{cycle}s" begin="1s" repeatCount="indefinite"/>'
+            f'</rect></clipPath>')
+        texts.append(
+            f'<text x="{text_x}" y="176" font-family="{MONO}" font-size="{size}" fill="{ACCENT}" '
+            f'clip-path="url(#type{i})">{escape(phrase)}</text>')
+        cursor += [(a, text_x), (t_typed, text_x + width), (t_hold, text_x + width), (t_erased, text_x)]
+    cursor = dedupe(cursor + [(1.0, text_x)])
+    return ("\n  ".join(clips), "\n".join(texts),
+            ";".join(f"{v:.0f}" for _, v in cursor), ";".join(f"{t:.4f}" for t, _ in cursor))
+
+
 def hero(rng):
     W, H, floor_y = 1000, 330, 300
     drops, drift, fall = rain(rng, W, H, 150, floor_y)
-    shadow, blocks = pixel_v(70, 64, 13)
-    subtitle = "&gt; Backend &amp; Distributed Systems Engineer"
+    shadow, blocks = pixel_v(38, 76, 11)
+    type_clips, type_texts, cursor_x, cursor_times = typing_cycle(
+        ["Software Engineer", "IT Developer", "Backend & Distributed Systems Engineer"],
+        x=442, cycle=12.0)
     stars = "\n".join(
         f'<circle class="star" cx="{rng.uniform(0, W):.0f}" cy="{rng.uniform(0, floor_y - 40):.0f}" '
         f'r="{rng.uniform(0.6, 1.4):.1f}" fill="#ffffff" style="animation-delay:{-rng.uniform(0, 4):.1f}s;'
@@ -119,11 +169,7 @@ def hero(rng):
   <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
     <feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
   </filter>
-  <clipPath id="typeClip">
-    <rect x="440" y="150" height="40" width="0">
-      <animate attributeName="width" values="0;470;470;0" keyTimes="0;0.45;0.85;1" dur="9s" begin="1s" repeatCount="indefinite"/>
-    </rect>
-  </clipPath>
+  {type_clips}
   <mask id="vMask"><g fill="#fff">{blocks.replace('class="blk"', '').replace('fill="url(#vGrad)"', '')}</g></mask>
 </defs>
 <style>
@@ -159,15 +205,14 @@ def hero(rng):
 <g class="vglow" filter="url(#glow)" opacity="0.4">{blocks.replace('class="blk"', '').replace(' style="', ' data-s="')}</g>
 {shadow}
 {blocks}
-<rect x="70" y="64" width="312" height="156" fill="url(#sweep)" mask="url(#vMask)"/>
+<rect x="38" y="76" width="374" height="132" fill="url(#sweep)" mask="url(#vMask)"/>
 
 <!-- name + subtitle -->
 <text x="440" y="118" font-family="{SANS}" font-size="52" font-weight="800" letter-spacing="2" fill="url(#shine)" class="fade" style="animation-delay:0.6s">VEDANK SHINDE</text>
-<g clip-path="url(#typeClip)">
-  <text x="442" y="176" font-family="{MONO}" font-size="19" fill="{ACCENT}">{subtitle}</text>
-</g>
-<rect class="cursor" x="442" y="160" width="10" height="20" fill="{ACCENT}" opacity="0.9">
-  <animate attributeName="x" values="442;905;905;442" keyTimes="0;0.45;0.85;1" dur="9s" begin="1s" repeatCount="indefinite"/>
+<text x="442" y="176" font-family="{MONO}" font-size="19" fill="{MUTED}">&gt;</text>
+{type_texts}
+<rect class="cursor" x="468" y="160" width="10" height="20" fill="{ACCENT}" opacity="0.9">
+  <animate attributeName="x" values="{cursor_x}" keyTimes="{cursor_times}" dur="12s" begin="1s" repeatCount="indefinite"/>
 </rect>
 <text x="442" y="214" font-family="{MONO}" font-size="14" fill="{MUTED}" class="fade" style="animation-delay:1.4s">Java · Spring Boot · Kafka · Go · Kubernetes · Cloud-native</text>
 
