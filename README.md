@@ -128,7 +128,8 @@ Hey there! I'm **Vedank**, a developer who loves building systems that stay fast
 <table align="center">
 <tr>
 <td align="center">
-<img src="https://github-readme-stats.vercel.app/api?username=vednk-shinde&show_icons=true&include_all_commits=true&count_private=true&theme=radical&hide_border=true&bg_color=0d1117&title_color=F7931A&icon_color=F7931A&text_color=c9d1d9&custom_title=Total%20Contributions" alt="GitHub Stats" height="170"/>
+<!-- Self-generated daily by .github/workflows/profile-cards.yml (the public github-readme-stats instance is offline) -->
+<img src="./assets/stats.svg" alt="GitHub Stats" height="170"/>
 </td>
 <td align="center">
 <img src="https://streak-stats.demolab.com/?user=vednk-shinde&theme=radical&hide_border=true&background=0d1117&ring=F7931A&fire=F7931A&currStreakNum=F7931A&currStreakLabel=F7931A&sideNums=c9d1d9&sideLabels=c9d1d9&dates=8b949e" alt="GitHub Streak" height="170"/>
@@ -145,7 +146,8 @@ Hey there! I'm **Vedank**, a developer who loves building systems that stay fast
 <p align="center"><sub><code>$VEDANK · 1D · contributions/day · LIVE</code></sub></p>
 
 <p align="center">
-<img width="100%" src="https://github-readme-activity-graph.vercel.app/graph?username=vednk-shinde&bg_color=0d1117&color=c9d1d9&title_color=F7931A&line=F7931A&point=FFFFFF&area=true&area_color=F7931A&hide_border=true&radius=6&custom_title=%24VEDANK%20%E2%80%94%20Contribution%20Chart" alt="Contribution activity graph"/>
+<!-- Self-generated daily by .github/workflows/profile-cards.yml (the public github-readme-activity-graph instance is offline) -->
+<img width="100%" src="./assets/activity-graph.svg" alt="Contribution activity graph"/>
 </p>
 
 ---
